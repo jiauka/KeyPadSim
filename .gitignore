@@ -1,0 +1,7 @@
+build/*
+/.cproject
+/.project
+/dependencies.lock
+/sdkconfig.old
+/managed_components/*
+/main/build

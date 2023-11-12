@@ -1,0 +1,15 @@
+menu "KeyPadSim Configuration"
+
+    choice USE_BLE
+        prompt "USe BLE YES/NO"
+        default USE_BLE_YES
+        help
+            Defines the BLE
+
+        config USE_BLE_YES
+            bool "BLE Active"
+        config USE_BLE_NO
+            bool "No BLE"
+    endchoice
+
+endmenu
