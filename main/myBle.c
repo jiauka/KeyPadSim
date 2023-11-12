@@ -13,20 +13,55 @@ DY STOP
 AUTO
 07 07 70 07 70 07 01 
 00 07 70 07 70 07 00 
+
 UP
 
-07 07 70 07 80 0c 01 
-07 07 70 07 80 0b 01 
-07 07 70 07 28 0a 01 
-07 07 70 07 28 09 01 
-07 07 70 07 28 08 01 
-07 07 70 07 d0 07 01 
-07 07 70 07 4c 06 01 
-07 07 70 07 4c 05 01 
-07 07 70 07 4c 04 01 
-07 07 70 07 20 03 01 
 00 07 70 07 20 03 00 
 00 07 70 07 10 03 00 
+07 07 70 07 80 0c 01 
+dy Key =07800c
+07 07 70 07 80 0b 01 
+dy Key =07800b
+07 07 70 07 28 0a 01 
+dy Key =07280a
+07 07 70 07 28 09 01 
+dy Key =072809
+07 07 70 07 28 08 01 
+dy Key =072808
+07 07 70 07 d0 07 01 
+dy Key =07d007
+07 07 70 07 4c 06 01 
+dy Key =074c06
+07 07 70 07 4c 05 01 
+dy Key =074c05
+07 07 70 07 4c 04 01 
+dy Key =074c04
+07 07 70 07 20 03 01 
+dy Key =072003
+R
+* 00 07 ea 0b 87 04 00 
+00 07 ea 0b 87 04 00 
+07 07 32 01 87 04 01 
+dy Key =018704
+07 07 8a 02 87 04 01 
+dy Key =028704
+[JCB Esp32RfCallback] k=0,a=0
+07 07 e2 04 87 04 01 
+dy Key =048704
+07 07 c4 05 87 04 01 
+dy Key =058704
+07 07 6c 06 87 04 01 
+dy Key =068704
+07 07 40 07 87 04 01 
+dy Key =078704
+07 07 50 08 87 04 01 
+dy Key =088704
+07 07 70 09 87 04 01 
+dy Key =098704
+07 07 40 0a 87 04 01 
+dy Key =0a8704
+07 07 ea 0b 87 04 01 
+dy Key =0b8704
 
 DW
 * 
@@ -77,12 +112,12 @@ DW
 #define M3_CODE_KEY_ON 0xf401f4
 #define M3_CODE_KEY_STOP 0xf40152
 
-#define DY_CODE_KEY_DW 0x07540b
-#define DY_CODE_KEY_UP 0x072003
-#define DY_CODE_KEY_R 0x028704
-#define DY_CODE_KEY_L 0x0b8704
-#define DY_CODE_KEY_ON 0x077007
-#define DY_CODE_KEY_STOP 0x08fc0e
+#define DY_CODE_KEY_DW 0x7007540b
+#define DY_CODE_KEY_UP 0x70072003
+#define DY_CODE_KEY_R 0xea0b8704
+#define DY_CODE_KEY_L 0xbc028704
+#define DY_CODE_KEY_ON 0x70077007
+#define DY_CODE_KEY_STOP 0x0008fc0e
 
 static const char* TAG = "myBle";
 
@@ -692,7 +727,7 @@ static int blecent_gap_event(struct ble_gap_event* event, void* arg)
       int len = OS_MBUF_PKTLEN(event->notify_rx.om);
       memset(data, 0, sizeof(data));
       os_mbuf_copydata(event->notify_rx.om, 0, len, data);
-#if 1
+#if 0
       for (int i = 0; i < len; i++) {
         printf("%02x ", data[i]);
       }
@@ -792,11 +827,11 @@ static int blecent_gap_event(struct ble_gap_event* event, void* arg)
         }
       } else if (ble_keypad == BLE_KEYPAD_DY) {
         uint32_t key = 0;
-        key = data[3] << 16| data[4] << 8 |data[5];
+        key = data[2] << 24|data[3] << 16| data[4] << 8 |data[5];
         if(data[0] == 0x00) { // key stop
           memset(&bleEvent, 0, sizeof(ble_event_t));
         } else {
-          printf("dy Key =%06lx\n", key);
+          MODLOG_DFLT(INFO,"dy Key =%08lx", key);
           if(_callback) {
             switch(key) {
               case DY_CODE_KEY_STOP:
