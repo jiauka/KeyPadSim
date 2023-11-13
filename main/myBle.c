@@ -117,8 +117,8 @@ DW
 #define DY_CODE_KEY_R 0xea0b8704
 #define DY_CODE_KEY_L 0xbc028704
 #define DY_CODE_KEY_ON 0x70077007
-#define DY_CODE_KEY_STOP 0x0008fc0e
-
+#define DY_CODE_KEY_STOP 0x0008a60d
+//0008a60d
 static const char* TAG = "myBle";
 
 const char* SERVER_NAME = "Magicsee";
